@@ -1,7 +1,12 @@
+import { useState } from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import CryptoItem from './components/CryptoItem';
 
+import { data } from './data';
+
 export default function App() {
+  const [items, setItems] = useState(data);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -9,9 +14,9 @@ export default function App() {
         <Image source={require('./assets/portrait.jpeg')} style={styles.avatar} />
       </View>
       <View style={styles.listContainer}>
-        <CryptoItem />
-        <CryptoItem />
-        <CryptoItem />
+        {items.map((item) =>
+          <CryptoItem key={item.id} {...item} />
+        )}
       </View>
     </SafeAreaView>
   );
