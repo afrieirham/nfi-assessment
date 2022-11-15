@@ -1,4 +1,8 @@
+export type RootStackParamList = {
+  Home: undefined;
+  AddCrypto: undefined;
 
+};
 
 export interface MarketData {
   price_usd: number;

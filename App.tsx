@@ -3,8 +3,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
 import Home from './screens/Home';
+import AddCrypto from './screens/AddCrypto';
+import { RootStackParamList } from './types';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function Header() {
   return (
@@ -21,6 +23,13 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
+          options={{
+            headerTitle: () => <Header />,
+            headerStyle: { backgroundColor: '#312e81' },
+          }} />
+        <Stack.Screen
+          name="AddCrypto"
+          component={AddCrypto}
           options={{
             headerTitle: () => <Header />,
             headerStyle: { backgroundColor: '#312e81' },

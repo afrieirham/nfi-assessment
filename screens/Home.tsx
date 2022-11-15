@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, View } from 'react-native';
 
-import { Crypto } from '../types';
+import { Crypto, RootStackParamList } from '../types';
 import CryptoItem from '../components/CryptoItem';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 interface APIResponse {
   status: {
@@ -13,7 +14,9 @@ interface APIResponse {
   data: Crypto[];
 }
 
-export default function App() {
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+export default function Home({ navigation }: Props) {
   const [mock] = useState(['btc', 'eth', 'usdt', 'xrp']);
   const [real, setReal] = useState<Crypto[]>([]);
 
@@ -32,6 +35,7 @@ export default function App() {
         {real.map((item) =>
           <CryptoItem key={item.id} {...item} />
         )}
+        <Button title='Add a Cryptocurrency' onPress={() => navigation.navigate('AddCrypto')} />
       </View>
     </ScrollView>
   );
