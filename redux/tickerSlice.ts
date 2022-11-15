@@ -14,7 +14,7 @@ export const tickersSlice = createSlice({
   initialState,
   reducers: {
     addTicker: (state, action: PayloadAction<string>) => {
-      state.tickers.push(action.payload);
+      state.tickers.push(action.payload.toLowerCase());
     },
   },
 });
