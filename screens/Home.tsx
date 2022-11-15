@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Crypto, RootStackParamList } from '../types';
 import CryptoItem from '../components/CryptoItem';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootState } from '../store';
 
 interface APIResponse {
   status: {
@@ -17,17 +19,17 @@ interface APIResponse {
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function Home({ navigation }: Props) {
-  const [mock] = useState(['btc', 'eth', 'usdt', 'xrp']);
+  const { tickers } = useSelector((state: RootState) => state.tickers);
   const [real, setReal] = useState<Crypto[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const { data }: { data: APIResponse; } = await axios.get('https://data.messari.io/api/v1/assets');
-      const filtered = data.data.filter(coin => mock.includes(coin.symbol.toLowerCase()));
+      const filtered = data.data.filter(coin => tickers.includes(coin.symbol.toLowerCase()));
       setReal(filtered);
     };
     fetchData();
-  }, []);
+  }, [tickers]);
 
   return (
     <ScrollView>
