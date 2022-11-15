@@ -1,17 +1,9 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import ArrowUpRight from '../assets/icons/arrow-up-right.svg';
 import ArrowDownLeft from '../assets/icons/arrow-down-left.svg';
+import { Crypto } from '../types';
 
-interface CryptoProps {
-  symbol: string;
-  name: string;
-  metrics: {
-    market_data: {
-      price_usd: number;
-      percent_change_usd_last_24_hours: number;
-    };
-  };
-}
+
 
 function PriceChange({ priceChange }: { priceChange: string; }) {
   const positiveChange = Number(priceChange) > 0;
@@ -24,7 +16,7 @@ function PriceChange({ priceChange }: { priceChange: string; }) {
   );
 }
 
-export default function CryptoItem(props: CryptoProps) {
+export default function CryptoItem(props: Crypto) {
   const { symbol, name, metrics } = props;
   const price = metrics.market_data.price_usd.toFixed(2);
   const priceChange = metrics.market_data.percent_change_usd_last_24_hours.toFixed(2);

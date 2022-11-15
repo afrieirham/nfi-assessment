@@ -1,11 +1,30 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+
+import { Crypto } from './types';
 import CryptoItem from './components/CryptoItem';
 
-import { data } from './data';
+interface APIResponse {
+  status: {
+    elapsed: number;
+    timestamp: string;
+  };
+  data: Crypto[];
+}
 
 export default function App() {
-  const [items, setItems] = useState(data);
+  const [mock] = useState(['btc', 'eth', 'usdt', 'xrp']);
+  const [real, setReal] = useState<Crypto[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data }: { data: APIResponse; } = await axios.get('https://data.messari.io/api/v1/assets');
+      const filtered = data.data.filter(coin => mock.includes(coin.symbol.toLowerCase()));
+      setReal(filtered);
+    };
+    fetchData();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -14,7 +33,7 @@ export default function App() {
         <Image source={require('./assets/portrait.jpeg')} style={styles.avatar} />
       </View>
       <View style={styles.listContainer}>
-        {items.map((item) =>
+        {real.map((item) =>
           <CryptoItem key={item.id} {...item} />
         )}
       </View>
