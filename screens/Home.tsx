@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Crypto, RootStackParamList } from '../types';
 import CryptoItem from '../components/CryptoItem';
@@ -21,18 +21,29 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 export default function Home({ navigation }: Props) {
   const { tickers } = useSelector((state: RootState) => state.tickers);
   const [real, setReal] = useState<Crypto[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    const { data }: { data: APIResponse; } = await axios.get('https://data.messari.io/api/v1/assets');
+    const filtered = data.data.filter(coin => tickers.includes(coin.symbol.toLowerCase()));
+    setReal(filtered);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data }: { data: APIResponse; } = await axios.get('https://data.messari.io/api/v1/assets');
-      const filtered = data.data.filter(coin => tickers.includes(coin.symbol.toLowerCase()));
-      setReal(filtered);
-    };
     fetchData();
   }, [tickers]);
 
+
+
   return (
-    <ScrollView>
+    <ScrollView refreshControl={
+      <RefreshControl
+        refreshing={loading}
+        onRefresh={fetchData}
+      />
+    }>
       <View style={styles.listContainer}>
         {real.map((item) =>
           <CryptoItem key={item.id} {...item} />

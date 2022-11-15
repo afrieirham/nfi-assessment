@@ -36,6 +36,7 @@ export default function App() {
             options={{
               headerTitle: () => <Header title='Add a Cryptocurrency' />,
               headerStyle: { backgroundColor: '#312e81' },
+              headerTintColor: '#ffffff'
             }} />
         </Stack.Navigator>
       </NavigationContainer>
